@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 
 import { getInitialData } from "./util";
 import { Task } from "./interfaces";
@@ -63,15 +63,13 @@ export default function TaskView() {
 
   return (
     <React.Fragment>
-      <Router>
-        <Navigation />
-        <Content
-          tableData={taskList}
-          onSave={handleSave}
-          onDelete={handleDelete}
-          onDone={handleDone}
-        />
-      </Router>
+      <Navigation />
+      <Content
+        tableData={taskList}
+        onSave={handleSave}
+        onDelete={handleDelete}
+        onDone={handleDone}
+      />
     </React.Fragment>
   );
 }

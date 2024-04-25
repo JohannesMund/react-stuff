@@ -9,3 +9,12 @@ tr.critical
   width: 500px;
   margin-right: auto;
 }
+
+p.info {
+  background-image: url("./../ressources/warning.svg");
+  background-repeat: no-repeat;
+  background-position: left top;
+
+  text-align: center;
+}
+
