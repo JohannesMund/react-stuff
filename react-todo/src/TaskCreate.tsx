@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import { Task } from "./interfaces";
 import { useNavigate } from "react-router-dom";
 import { formatDateToString, setInputChange } from "./util";
@@ -21,28 +21,24 @@ function createTask(desc: string, prio: number): Task {
 export default function TaskCreate(props: ITaskCreate) {
   const navigate = useNavigate();
 
-  const [data, setData] = useState<Task>(() => createTask("", 3)); // Initial Wert macht sinn, sonst sind viele Attribute mit undefined belegt.
-
+  const [data, setData] = useState<Task>(() => createTask("", 3));
   const [info, setInfo] = useState("Keine");
   const [hasError, setHasError] = useState(false);
 
   const saveTask = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // Sorgt dafür das das Submit die Seite nicht neu lädt.
+    event.preventDefault();
 
-    // Speichern... // Typ von data ist "Task | undefined" daher muss die Absicherung hier sein.
     if (data !== undefined) {
       props.onSave(data);
     }
-    // Navigieren zur Erf. Seite
     navigate("/Table");
   };
 
-  // Genereller Handler um Änderungen zu übernehmen.
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setInputChange(setData, event);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     validate(data);
   }, [data]);
 
@@ -66,7 +62,6 @@ export default function TaskCreate(props: ITaskCreate) {
       <h1>new task</h1>
       <form className="form" onSubmit={saveTask}>
         <label htmlFor="desc">Task</label>{" "}
-        {/* The for attribute is called htmlFor for consistency with the DOM property API. */}
         <input
           id="desc"
           type="text"
@@ -94,7 +89,7 @@ export default function TaskCreate(props: ITaskCreate) {
           name="dueDate"
           type="date"
           id="dueDate"
-          value={formatDateToString(data?.dueDate)} // Formatierung nach string notwendig
+          value={formatDateToString(data?.dueDate)}
           onChange={handleInputChange}
         />
         <label htmlFor="done">Done?</label>
