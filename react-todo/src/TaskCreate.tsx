@@ -49,12 +49,12 @@ export default function TaskCreate(props: ITaskCreate) {
   const validate = (currentData: Task) => {
     let message = "";
     if (currentData.taskName === "") {
-      message = message + "Beschreibung darf nicht leer sein. ";
+      message = message + "Description cannot be empty.";
     }
     let now = new Date();
     now.setHours(0, 0, 0, 0);
     if (currentData.dueDate < now) {
-      message = message + "Datum darf nicht in der Vergangenheit liegen. ";
+      message = message + "Date cannot be in the past";
     }
 
     setInfo(message);
@@ -65,7 +65,7 @@ export default function TaskCreate(props: ITaskCreate) {
     <React.Fragment>
       <h1>new task</h1>
       <form className="form" onSubmit={saveTask}>
-        <label htmlFor="desc">Aufgabe</label>{" "}
+        <label htmlFor="desc">Task</label>{" "}
         {/* The for attribute is called htmlFor for consistency with the DOM property API. */}
         <input
           id="desc"
@@ -75,7 +75,7 @@ export default function TaskCreate(props: ITaskCreate) {
           value={data?.taskName}
           onChange={handleInputChange}
         />
-        <label htmlFor="prio">Priorität</label>
+        <label htmlFor="prio">Priority</label>
         <select
           id="prio"
           value={data?.taskPriority}
@@ -83,11 +83,13 @@ export default function TaskCreate(props: ITaskCreate) {
             setData({ ...data, taskPriority: parseInt(e.target.value) } as Task)
           }
         >
-          <option value="1">1 - Wichtig</option>
-          <option value="2">2 - Irgendwie schon wichtig</option>
-          <option value="3">3 - Muss nicht, kann aber</option>
+          <option value="1">1 - Important</option>
+          <option value="2">2 - Somewhat important</option>
+          <option value="3">
+            3 - Let's be honest, nobody will ever do that
+          </option>
         </select>
-        <label htmlFor="dueDate">Ziel-Datum</label>
+        <label htmlFor="dueDate">Due date</label>
         <input
           name="dueDate"
           type="date"
@@ -95,7 +97,7 @@ export default function TaskCreate(props: ITaskCreate) {
           value={formatDateToString(data?.dueDate)} // Formatierung nach string notwendig
           onChange={handleInputChange}
         />
-        <label htmlFor="done">Erledigt?</label>
+        <label htmlFor="done">Done?</label>
         <input
           name="isDone"
           type="checkbox"
@@ -104,14 +106,12 @@ export default function TaskCreate(props: ITaskCreate) {
           onChange={handleInputChange}
         />
         <p />
-        <input type="submit" value="Erstellen" disabled={hasError} />
+        <input type="submit" value="Create" disabled={hasError} />
         <p />
-        {/* String(data?.done) - String umwandlung muss sein, sonst erfolgt keine Ausgabe */}
         {
-          <>
-            <p />
-            <span>Info: {info}</span>
-          </>
+          <p className="info">
+            <em>{info}</em>
+          </p>
         }
       </form>
     </React.Fragment>

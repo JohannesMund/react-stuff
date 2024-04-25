@@ -9,3 +9,12 @@ tr.critical
   width: 500px;
   margin-right: auto;
 }
+
+p.info {
+  text-align: center;
+}
+p.info em{  
+  margin-right: auto;
+  margin-left: auto;    
+  text-align: center;
+}
