@@ -36,6 +36,9 @@ export default function TaskView() {
   };
 
   const maxTaskId = () => {
+    if (taskList.length === 0 || !Array.isArray(taskList)) {
+      return 0;
+    }
     return Math.max(...taskList.map((task) => task.id));
   };
 
