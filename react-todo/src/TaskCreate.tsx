@@ -108,11 +108,11 @@ export default function TaskCreate(props: ITaskCreate) {
         <p />
         <input type="submit" value="Create" disabled={hasError} />
         <p />
-        {
+        {info.length !== 0 && (
           <p className="info">
             <em>{info}</em>
           </p>
-        }
+        )}
       </form>
     </React.Fragment>
   );

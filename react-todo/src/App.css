@@ -11,11 +11,10 @@ tr.critical
 }
 
 p.info {
+  background-image: url("./../ressources/warning.svg");
+  background-repeat: no-repeat;
+  background-position: left top;
+
   text-align: center;
 }
 
-p.info em{  
-  margin-right: auto;
-  margin-left: auto;    
-  text-align: center;
-}
