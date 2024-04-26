@@ -1,5 +1,4 @@
-tr.critical
-{
+tr.critical {
   background-color: coral;
 }
 
@@ -8,6 +7,25 @@ tr.critical
   grid-template-columns: auto auto;
   width: 500px;
   margin-right: auto;
+  margin-left: auto;
+}
+
+.form label {
+  text-align: right;
+  padding-right: 10px;
+}
+
+table {
+  width: 500px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+h1,
+h2,
+h3,
+nav {
+  text-align: center;
 }
 
 p.info {
@@ -17,4 +35,3 @@ p.info {
 
   text-align: center;
 }
-
