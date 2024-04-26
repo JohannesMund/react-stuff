@@ -25,6 +25,15 @@ export function dispatchFunction(state: TaskState, action: TaskAction) {
     return maxTaskId() + 1;
   };
 
+  const handleDone = (id: number, done: boolean) => {
+    return [
+      ...state.tasks.map((t) => {
+        if (t.id === id) t.isDone = done;
+        return t;
+      }),
+    ];
+  };
+
   switch (action.type) {
     case "add":
       action.task.id = nextTaskId();
@@ -37,23 +46,13 @@ export function dispatchFunction(state: TaskState, action: TaskAction) {
     case "done":
       return {
         ...state,
-        tasks: [
-          ...state.tasks.map((t) => {
-            if (t.id === action.id) t.isDone = true;
-            return t;
-          }),
-        ],
+        tasks: handleDone(action.id, true),
       };
 
     case "undone":
       return {
         ...state,
-        tasks: [
-          ...state.tasks.map((t) => {
-            if (t.id === action.id) t.isDone = false;
-            return t;
-          }),
-        ],
+        tasks: handleDone(action.id, false),
       };
     default:
       throw new Error();
