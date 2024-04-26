@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useReducer } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 
 import { getInitialData } from "./util";
-import { Task } from "./interfaces";
+import { Task, TaskAction, dispatchFunction } from "./TaskInterface";
 import TaskTable from "./TaskTable";
 import TaskCreate from "./TaskCreate";
 
 interface IContent {
   tableData: Task[];
-  onSave: (task: Task) => void; // Event Handler
-  onDone: (id: number, done: boolean) => void; // Event Handler
-  onDelete: (id: number) => void; // Event Handler
+  onDispatch: React.Dispatch<TaskAction>;
 }
 
 function Navigation() {
@@ -24,60 +22,7 @@ function Navigation() {
   );
 }
 
-export default function TaskView() {
-  const [taskList, setTaskList] = useState<Task[]>([]);
-
-  useEffect(() => {
-    setTaskList(getInitialData());
-  }, []);
-
-  const handleDelete = (id: number) => {
-    setTaskList(taskList.filter((eachTask) => eachTask.id !== id));
-  };
-
-  const maxTaskId = () => {
-    if (taskList.length === 0 || !Array.isArray(taskList)) {
-      return 0;
-    }
-    return Math.max(...taskList.map((task) => task.id));
-  };
-
-  const nextTaskId = () => {
-    return maxTaskId() + 1;
-  };
-
-  const handleDone = (id: number, done: boolean) => {
-    setTaskList(
-      taskList.map((eachTask) => {
-        if (eachTask.id === id) {
-          eachTask.isDone = done;
-        }
-        return eachTask;
-      })
-    );
-  };
-
-  const handleSave = (task: Task) => {
-    var tasks: Task[] = taskList;
-    task.id = nextTaskId();
-    tasks.push(task);
-    setTaskList(tasks);
-  };
-
-  return (
-    <React.Fragment>
-      <Navigation />
-      <Content
-        tableData={taskList}
-        onSave={handleSave}
-        onDelete={handleDelete}
-        onDone={handleDone}
-      />
-    </React.Fragment>
-  );
-}
-
-function Content(props: IContent) {
+function TaskViewContent(props: IContent) {
   return (
     <Routes>
       <Route
@@ -85,23 +30,35 @@ function Content(props: IContent) {
         element={
           <TaskTable
             tableData={props.tableData}
-            onDelete={props.onDelete}
-            onDone={props.onDone}
+            onDispatch={props.onDispatch}
           />
         }
       />
-      <Route path="Create" element={<TaskCreate onSave={props.onSave} />} />
+      <Route
+        path="Create"
+        element={<TaskCreate onDispatch={props.onDispatch} />}
+      />
       <Route
         path="/"
         element={
-          /* Default nicht vergessen, dass ist der Start-Pfad. */
           <TaskTable
             tableData={props.tableData}
-            onDelete={props.onDelete}
-            onDone={props.onDone}
+            onDispatch={props.onDispatch}
           />
         }
       />
     </Routes>
+  );
+}
+
+export default function TaskView() {
+  const [state, dispatch] = useReducer(dispatchFunction, {
+    tasks: getInitialData(),
+  });
+  return (
+    <React.Fragment>
+      <Navigation />
+      <TaskViewContent tableData={state.tasks} onDispatch={dispatch} />
+    </React.Fragment>
   );
 }

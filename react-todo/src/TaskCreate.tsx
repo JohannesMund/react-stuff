@@ -1,10 +1,10 @@
 import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
-import { Task } from "./interfaces";
+import { Task, TaskAction } from "./TaskInterface";
 import { useNavigate } from "react-router-dom";
 import { formatDateToString, setInputChange } from "./util";
 
 interface ITaskCreate {
-  onSave: (task: Task) => void; // Event Handler
+  onDispatch: React.Dispatch<TaskAction>;
 }
 
 function createTask(desc: string, prio: number): Task {
@@ -29,7 +29,7 @@ export default function TaskCreate(props: ITaskCreate) {
     event.preventDefault();
 
     if (data !== undefined) {
-      props.onSave(data);
+      props.onDispatch({ type: "add", task: data });
     }
     navigate("/Table");
   };

@@ -1,32 +1,19 @@
 import React from "react";
-import { Task } from "./interfaces";
+import { Task, TaskAction } from "./TaskInterface";
 
 interface ITaskRow {
   task: Task;
-  onDone: (id: number) => void;
-  onUndone: (id: number) => void;
-  onDelete: (id: number) => void;
+  onDispatch: React.Dispatch<TaskAction>;
 }
 
 interface ITaskTable {
   tableData: Task[];
-  onDone: (id: number, done: boolean) => void; // Event Handler
-  onDelete: (id: number) => void; // Event Handler
+  onDispatch: React.Dispatch<TaskAction>;
 }
 
 export default function TaskTable(props: ITaskTable) {
   const taskRows = props.tableData.map((task) => (
-    <TableRow
-      key={task.id}
-      onDone={(id) => {
-        props.onDone(id, true);
-      }}
-      onUndone={(id) => {
-        props.onDone(id, false);
-      }}
-      onDelete={props.onDelete}
-      task={task}
-    />
+    <TableRow key={task.id} onDispatch={props.onDispatch} task={task} />
   ));
 
   return (
@@ -65,7 +52,7 @@ function TableRow(taskRow: ITaskRow) {
         {taskRow.task.isDone ? (
           <button
             onClick={() => {
-              taskRow.onUndone(taskRow.task.id);
+              taskRow.onDispatch({ type: "undone", id: taskRow.task.id });
             }}
           >
             Set Undone
@@ -73,7 +60,7 @@ function TableRow(taskRow: ITaskRow) {
         ) : (
           <button
             onClick={() => {
-              taskRow.onDone(taskRow.task.id);
+              taskRow.onDispatch({ type: "done", id: taskRow.task.id });
             }}
           >
             Set Done
@@ -83,7 +70,7 @@ function TableRow(taskRow: ITaskRow) {
       <td>
         <button
           onClick={() => {
-            taskRow.onDelete(taskRow.task.id);
+            taskRow.onDispatch({ type: "delete", id: taskRow.task.id });
           }}
         >
           Delete
